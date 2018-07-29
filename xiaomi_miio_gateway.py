@@ -65,7 +65,7 @@ def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
     async_add_devices([device], update_before_add=True)
 
 class XiaomiGateway(MediaPlayerDevice):
-    """Represent the Xiaomi TV for Home Assistant."""
+    """Represent the Xiaomi Gateway for Home Assistant."""
 
     def __init__(self, device, config, device_info):
         """Initialize the entity."""
@@ -97,7 +97,7 @@ class XiaomiGateway(MediaPlayerDevice):
             result = await self.hass.async_add_job(
                 partial(func, *args, **kwargs))
 
-            _LOGGER.info("Response received from miio device: %s", result)
+            _LOGGER.info("Response received from Gateway: %s", result)
 
             return result[0] == "ok"
         except DeviceException as exc:
@@ -131,20 +131,20 @@ class XiaomiGateway(MediaPlayerDevice):
 
     async def turn_off(self):
         result = await self._try_command(
-            "Turning the miio device off failed.", self._device.send,
+            "Turning the Gateway off failed.", self._device.send,
             'play_fm', ['off'])
 
     async def turn_on(self):
-        """Wake the TV back up from sleep."""
+        """Wake the Gateway back up from sleep."""
         result = await self._try_command(
-            "Turning the miio device off failed.", self._device.send,
+            "Turning the Gateway on failed.", self._device.send,
             'play_fm', ['on'])
 
     async def volume_up(self):
         """Increase volume by one."""
         volume = self._volume + 1
         result = await self._try_command(
-            "Turning the miio device off failed.", self._device.send,
+            "Turning the Gateway volume failed.", self._device.send,
             'set_fm_volume', [volume])
         if result:
             self._volume = volume
@@ -154,7 +154,7 @@ class XiaomiGateway(MediaPlayerDevice):
         """Decrease volume by one."""
         volume = self._volume - 1
         result = await self._try_command(
-            "Turning the miio device off failed.", self._device.send,
+            "Turning the Gateway volume failed.", self._device.send,
             'set_fm_volume', [volume])
         if result:
             self._volume = volume
@@ -166,7 +166,7 @@ class XiaomiGateway(MediaPlayerDevice):
             volume = 0
 
         result = await self._try_command(
-            "Turning the miio device off failed.", self._device.send,
+            "Turning the Gateway volume failed.", self._device.send,
             'set_fm_volume', [volume])
         if result:
             if volume == 0:
@@ -175,7 +175,7 @@ class XiaomiGateway(MediaPlayerDevice):
                 self._muted = False
 
     async def async_update(self):
-        """Fetch state from the device."""
+        """Fetch state from Gateway."""
         from miio import DeviceException
 
         try:

@@ -7,6 +7,7 @@ this plays the last played station on the gateway
 
 follow this to get custom radios in the gateway -> http://ximiraga.ru
 
+
 configuration.yaml example
 
 media_player:
