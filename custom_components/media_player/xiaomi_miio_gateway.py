@@ -10,7 +10,7 @@ from functools import partial
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.media_player import (
     SUPPORT_TURN_ON, SUPPORT_TURN_OFF, MediaPlayerDevice, PLATFORM_SCHEMA, SUPPORT_VOLUME_MUTE,
-    SUPPORT_VOLUME_STEP)
+    SUPPORT_VOLUME_STEP, SUPPORT_VOLUME_SET)
 from homeassistant.const import (CONF_HOST, CONF_NAME, CONF_TOKEN, STATE_OFF, STATE_ON)
 
 REQUIREMENTS = ['python-miio>=0.3.7']
@@ -28,7 +28,7 @@ ATTR_STATE_VALUE = 'state_value'
 _LOGGER = logging.getLogger(__name__)
 
 SUPPORT_XIAOMI_GATEWAY_FM = SUPPORT_VOLUME_STEP | SUPPORT_TURN_ON | \
-                    SUPPORT_TURN_OFF | SUPPORT_VOLUME_MUTE
+                    SUPPORT_TURN_OFF | SUPPORT_VOLUME_MUTE | SUPPORT_VOLUME_SET
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
@@ -80,7 +80,7 @@ class XiaomiGateway(MediaPlayerDevice):
                                             'pause')
         self._icon = 'mdi:radio'
         self._muted = False
-
+        self._volume = 0
         self._available = None
         self._state = None
         self._state_attrs = {
@@ -125,6 +125,11 @@ class XiaomiGateway(MediaPlayerDevice):
         return self._muted
 
     @property
+    def volume_level(self):
+        """Volume level of the media player (0..1)."""
+        return self._volume
+
+    @property
     def supported_features(self):
         """Flag media player features that are supported."""
         return SUPPORT_XIAOMI_GATEWAY_FM
@@ -142,22 +147,23 @@ class XiaomiGateway(MediaPlayerDevice):
 
     async def volume_up(self):
         """Increase volume by one."""
-        volume = self._volume + 1
+        volume = round(self._volume * 100) + 1
         result = await self._try_command(
             "Turning the Gateway volume failed.", self._device.send,
             'set_fm_volume', [volume])
-        if result:
-            self._volume = volume
-            self._muted = False
 
     async def volume_down(self):
         """Decrease volume by one."""
-        volume = self._volume - 1
+        volume = round(self._volume * 100) - 1
         result = await self._try_command(
             "Turning the Gateway volume failed.", self._device.send,
             'set_fm_volume', [volume])
-        if result:
-            self._volume = volume
+
+    async def set_volume_level(self, volume):
+        volset = round(volume * 100)
+        result = await self._try_command(
+            "Setting the Gateway volume failed.", self._device.send,
+            'set_fm_volume', [volset])
 
     async def mute_volume(self, mute):
         """Send mute command."""
@@ -196,7 +202,7 @@ class XiaomiGateway(MediaPlayerDevice):
                 self._state = STATE_OFF
             elif state == 'run':
                 self._state = STATE_ON
-                self._volume = volume
+                self._volume = volume / 100
             else:
                 _LOGGER.warning(
                     "New state (%s) doesn't match expected values: %s/%s",
