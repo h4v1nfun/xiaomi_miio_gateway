@@ -10,7 +10,7 @@ from functools import partial
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.media_player import (
     SUPPORT_TURN_ON, SUPPORT_TURN_OFF, MediaPlayerDevice, PLATFORM_SCHEMA, SUPPORT_VOLUME_MUTE,
-    SUPPORT_VOLUME_STEP, SUPPORT_VOLUME_SET)
+    SUPPORT_VOLUME_STEP, SUPPORT_VOLUME_SET, SUPPORT_NEXT_TRACK)
 from homeassistant.const import (CONF_HOST, CONF_NAME, CONF_TOKEN, STATE_OFF, STATE_ON)
 
 REQUIREMENTS = ['python-miio>=0.3.7']
@@ -28,7 +28,7 @@ ATTR_STATE_VALUE = 'state_value'
 _LOGGER = logging.getLogger(__name__)
 
 SUPPORT_XIAOMI_GATEWAY_FM = SUPPORT_VOLUME_STEP | SUPPORT_TURN_ON | \
-                    SUPPORT_TURN_OFF | SUPPORT_VOLUME_MUTE | SUPPORT_VOLUME_SET
+                    SUPPORT_TURN_OFF | SUPPORT_VOLUME_MUTE | SUPPORT_VOLUME_SET | SUPPORT_NEXT_TRACK
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_HOST): cv.string,
@@ -152,6 +152,12 @@ class XiaomiGateway(MediaPlayerDevice):
             "Turning the Gateway volume failed.", self._device.send,
             'set_fm_volume', [volume])
 
+    async def media_next_track(self):
+        """Send next track command."""
+        result = await self._try_command(
+            "Turning the Gateway volume failed.", self._device.send,
+            'play_fm', ['next'])
+
     async def volume_down(self):
         """Decrease volume by one."""
         volume = round(self._volume * 100) - 1
@@ -187,6 +193,7 @@ class XiaomiGateway(MediaPlayerDevice):
         try:
             state = await self.hass.async_add_job(
                 self._device.send, 'get_prop_fm', '')
+            _LOGGER.info("Got new state: %s", state)
             volume = state.pop('current_volume')
             state = state.pop('current_status')
 
