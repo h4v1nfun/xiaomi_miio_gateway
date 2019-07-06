@@ -12,7 +12,7 @@ http://ximiraga.ru
 configuration.yaml example
 ```yaml
 media_player:
-  - platform: xiaomi_miio_gateway
+  - platform: xiaomi_gateway_radio
     host: <ip of gateway>
     token: <gateway token>
 ```
