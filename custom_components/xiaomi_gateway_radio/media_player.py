@@ -7,10 +7,9 @@ import voluptuous as vol
 import asyncio
 from functools import partial
 
-import homeassistant.helpers.config_validation as cv
-from homeassistant.components.media_player import (
-    SUPPORT_TURN_ON, SUPPORT_TURN_OFF, MediaPlayerDevice, PLATFORM_SCHEMA, SUPPORT_VOLUME_MUTE,
-    SUPPORT_VOLUME_STEP, SUPPORT_VOLUME_SET, SUPPORT_NEXT_TRACK)
+import homeassistant.helpers.config_validation as cv 
+from homeassistant.components.media_player import (MediaPlayerDevice, PLATFORM_SCHEMA)
+from homeassistant.components.media_player.const import (SUPPORT_TURN_ON, SUPPORT_TURN_OFF, SUPPORT_VOLUME_MUTE, SUPPORT_VOLUME_STEP, SUPPORT_VOLUME_SET, SUPPORT_NEXT_TRACK) 
 from homeassistant.const import (CONF_HOST, CONF_NAME, CONF_TOKEN, STATE_OFF, STATE_ON)
 
 REQUIREMENTS = ['python-miio>=0.3.7']
@@ -20,7 +19,7 @@ ATTR_FIRMWARE_VERSION = 'firmware_version'
 ATTR_HARDWARE_VERSION = 'hardware_version'
 
 DEFAULT_NAME = "Xiaomi Gateway Radio"
-DATA_KEY = 'media_player.xiaomi_miio_gateway'
+DATA_KEY = 'media_player.xiaomi_gateway_radio'
 
 ATTR_STATE_PROPERTY = 'state_property'
 ATTR_STATE_VALUE = 'state_value'
