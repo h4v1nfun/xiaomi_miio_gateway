@@ -8,7 +8,7 @@ import asyncio
 from functools import partial
 
 import homeassistant.helpers.config_validation as cv 
-from homeassistant.components.media_player import (MediaPlayerDevice, PLATFORM_SCHEMA)
+from homeassistant.components.media_player import (MediaPlayerEntity, PLATFORM_SCHEMA)
 from homeassistant.components.media_player.const import (SUPPORT_TURN_ON, SUPPORT_TURN_OFF, SUPPORT_VOLUME_MUTE, SUPPORT_VOLUME_STEP, SUPPORT_VOLUME_SET, SUPPORT_NEXT_TRACK) 
 from homeassistant.const import (CONF_HOST, CONF_NAME, CONF_TOKEN, STATE_OFF, STATE_ON)
 
@@ -63,7 +63,7 @@ def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
     hass.data[DATA_KEY][host] = device
     async_add_devices([device], update_before_add=True)
 
-class XiaomiGateway(MediaPlayerDevice):
+class XiaomiGateway(MediaPlayerEntity):
     """Represent the Xiaomi Gateway for Home Assistant."""
 
     def __init__(self, device, config, device_info):
