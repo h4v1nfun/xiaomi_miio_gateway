@@ -1,0 +1,10 @@
+{
+  "domain": "xiaomi_gateway_radio",
+  "name": "Xiaomi Gateway Radio",
+  "documentation": "https://github.com/h4v1nfun/xiaomi_miio_gateway",
+  "dependencies": [],
+  "codeowners": [
+    "@h4v1nfun"
+  ],
+  "requirements": []
+}
