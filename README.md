@@ -21,5 +21,7 @@ token is obtained the same way as explained here ->
 https://www.home-assistant.io/components/vacuum.xiaomi_miio/#retrieving-the-access-token
 
 Contributors:
+
 https://github.com/VedgeKonn
+
 https://github.com/glebsterx
