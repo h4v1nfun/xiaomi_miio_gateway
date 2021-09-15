@@ -9,6 +9,25 @@ follow this to get custom radios in the gateway ->
 http://ximiraga.ru
 
 
+# Installation:
+Follow only one of these installation methods.
+
+<details>
+  <summary><b>Installation and tracking with HACS:</b></summary>
+
+1. You can install this custom component by adding this repository (https://github.com/h4v1nfun/xiaomi_miio_gateway) to HACS in the settings menu of HACS first. You will find the custom component in the integration menu afterwards, look for 'Xiaomi Mi Gateway Radio Media Player'.
+
+2. Set the configuration.yaml
+</details>
+
+<details>
+  <summary><b>Manual installation:</b></summary>
+  
+1. Copy xiaomi_gateway_radio into custom_components
+
+2. Set the configuration.yaml
+</details>
+
 configuration.yaml example
 ```yaml
 media_player:
